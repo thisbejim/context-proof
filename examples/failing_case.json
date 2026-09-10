@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "name": "checkout-compaction-regression",
+  "profile": "generic",
+  "before": [
+    {
+      "id": "guardrail",
+      "kind": "instruction",
+      "role": "system",
+      "content": "Never send a purchase without an explicit approval.",
+      "critical": "exact"
+    },
+    {
+      "id": "goal",
+      "kind": "message",
+      "role": "user",
+      "content": "Reserve seat A1, but ask me before payment.",
+      "critical": true
+    },
+    {
+      "id": "call-1",
+      "kind": "function_call",
+      "call_id": "call-1",
+      "tool": "reserve_seat",
+      "arguments": {"seat": "A1"},
+      "status": "pending",
+      "critical": true
+    },
+    {
+      "id": "approval-1",
+      "kind": "approval",
+      "approval_id": "approval-1",
+      "for_call": "call-1",
+      "status": "pending",
+      "critical": true
+    }
+  ],
+  "after": [
+    {
+      "id": "guardrail",
+      "kind": "instruction",
+      "role": "system",
+      "content": "Never send a purchase without approval.",
+      "critical": "exact"
+    },
+    {
+      "id": "summary-1",
+      "kind": "compaction",
+      "content": "The user wants seat A1 reserved.",
+      "preserves": ["goal"]
+    },
+    {
+      "id": "orphan-result",
+      "kind": "function_call_output",
+      "call_id": "ghost-call",
+      "output": {"ok": true}
+    }
+  ],
+  "limits": {
+    "max_tokens": 50,
+    "reserve_tokens": 20,
+    "chars_per_token": 4
+  }
+}

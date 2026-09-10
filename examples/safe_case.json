@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "name": "checkout-compaction-safe",
+  "profile": "generic",
+  "before": [
+    {
+      "id": "guardrail",
+      "kind": "instruction",
+      "role": "system",
+      "content": "Never send a purchase without an explicit approval.",
+      "critical": "exact"
+    },
+    {
+      "id": "goal",
+      "kind": "message",
+      "role": "user",
+      "content": "Reserve seat A1, but ask me before payment.",
+      "critical": true
+    },
+    {
+      "id": "call-1",
+      "kind": "function_call",
+      "call_id": "call-1",
+      "tool": "reserve_seat",
+      "arguments": {"seat": "A1"},
+      "status": "pending",
+      "critical": true
+    },
+    {
+      "id": "approval-1",
+      "kind": "approval",
+      "approval_id": "approval-1",
+      "for_call": "call-1",
+      "status": "pending",
+      "critical": true
+    }
+  ],
+  "after": [
+    {
+      "id": "guardrail",
+      "kind": "instruction",
+      "role": "system",
+      "content": "Never send a purchase without an explicit approval.",
+      "critical": "exact"
+    },
+    {
+      "id": "summary-1",
+      "kind": "compaction",
+      "content": "The user wants seat A1 reserved. Payment still needs explicit approval. The reserve call and approval remain pending.",
+      "preserves": ["goal", "call-1", "approval-1"],
+      "preserve_status": {
+        "call-1": "pending",
+        "approval-1": "pending"
+      }
+    }
+  ],
+  "limits": {
+    "max_tokens": 1000,
+    "reserve_tokens": 200,
+    "chars_per_token": 4
+  }
+}

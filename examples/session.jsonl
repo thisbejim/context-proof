@@ -1,0 +1,5 @@
+{"phase":"before","name":"jsonl-session","profile":"generic","item":{"id":"guardrail","type":"message","role":"developer","content":"Do not expose private account data.","critical":"exact"}}
+{"phase":"before","item":{"id":"goal","type":"message","role":"user","content":"Summarize my account safely.","critical":true}}
+{"phase":"before","item":{"id":"call-1","type":"function_call","call_id":"call-1","name":"lookup_account","arguments":{"account":"demo"},"status":"pending","critical":true}}
+{"phase":"after","item":{"id":"guardrail","type":"message","role":"developer","content":"Do not expose private account data.","critical":"exact"}}
+{"phase":"after","item":{"id":"summary-1","type":"compaction","content":"The user requested a safe account summary; lookup_account is still pending.","preserves":["goal","call-1"],"preserve_status":{"call-1":"pending"}}}

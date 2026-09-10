@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "context-proof"
+version = "0.1.0"
+description = "Deterministic CI checks for safe AI-agent context compaction"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "James Childs-Maidment", email = "10917363+thisbejim@users.noreply.github.com" },
+]
+keywords = [
+  "llm",
+  "ai-agents",
+  "context-compaction",
+  "context-window",
+  "openai",
+  "responses-api",
+  "testing",
+  "reliability",
+  "ci",
+  "cli",
+  "local-first",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2,<2",
+  "mypy>=1.15,<2",
+  "pytest>=8.0,<9",
+  "ruff>=0.8,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/thisbejim/context-proof"
+Repository = "https://github.com/thisbejim/context-proof"
+Issues = "https://github.com/thisbejim/context-proof/issues"
+
+[project.scripts]
+context-proof = "context_proof.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src/context_proof"]
